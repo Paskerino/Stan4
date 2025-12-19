@@ -24,6 +24,11 @@ namespace Stand4
         {
             InitializeComponent();
         }
+        public MainWindow(AppViewModel viewModel) // DI сам його сюди передасть
+        {
+            InitializeComponent();
+            this.DataContext = viewModel;
+        }
         public MainWindow(MainViewModel viewModel)
         {
             InitializeComponent();

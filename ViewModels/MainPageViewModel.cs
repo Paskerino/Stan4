@@ -144,6 +144,8 @@ namespace Stand4
 
         //    Режим -> (ID труби -> Колір)
         // private Dictionary<SchemeMode, Dictionary<int, Brush>> _modeConfiguration;
+        private readonly AppViewModel _appNavigator;
+       
         public MainPageViewModel(
             ITestExecutionService testExecutor,
             IDataManager dataManager,
@@ -154,9 +156,12 @@ namespace Stand4
             IModbusService modbusService,
             IReportService reportService,
             ILogReaderService logReaderService,
-            IStatusLineParsingService statusLineParsingService
+            IStatusLineParsingService statusLineParsingService,
+            AppViewModel appNavigator
             )
         {
+            _appNavigator = appNavigator;
+
             _dataManager = dataManager;
             _modbusPolling = modbusPolling;
             _availableDevices = devices;
@@ -323,8 +328,27 @@ namespace Stand4
                 repDate = TranslationManager.Instance["Report_Date"];
             }
         }
+        
         public async Task test()
         {
+            _appNavigator.RequestConfirmation("Ви точно хочете вийти?", (result) =>
+            {
+                // Цей код виконається, коли екран підтвердження закриється
+                if (result == true)
+                {
+                    // Користувач натиснув ТАК
+                    // Тут твоя логіка виходу
+                    System.Windows.Application.Current.Shutdown();
+                }
+                else
+                {
+                    // Користувач натиснув НІ
+                    // Нічого не робимо, AppViewModel сам поверне нас на цей екран
+                    Console.WriteLine("Вихід скасовано");
+                }
+            });
+
+            return;
             var header = new ReportRow();
             header.Cells = new List<ReportCell>
             {

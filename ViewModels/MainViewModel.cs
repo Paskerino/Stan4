@@ -146,7 +146,7 @@ namespace Stand4
         private string repDate="Дата:";
         #endregion
         private readonly Brush _defaultColor = Brushes.White;
-
+        AppViewModel _appNavigator;
         //    Режим -> (ID труби -> Колір)
         private Dictionary<SchemeMode, Dictionary<int, Brush>> _modeConfiguration;
         public MainViewModel(
@@ -159,9 +159,11 @@ namespace Stand4
             IModbusService modbusService,
             IReportService reportService,
             ILogReaderService logReaderService,
-            IStatusLineParsingService statusLineParsingService
+            IStatusLineParsingService statusLineParsingService,
+            AppViewModel appNavigator
             )
         {
+            _appNavigator = appNavigator;
             _dataManager = dataManager;
             _modbusPolling = modbusPolling;
             _availableDevices = devices;

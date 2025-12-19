@@ -105,13 +105,14 @@
     </ApplicationDefinition>
     <Compile Include="enums\SchemeMode.cs" />
     <Compile Include="enums\TestMode.cs" />
+    <Compile Include="UC\ConfirmationView.xaml.cs">
+      <DependentUpon>ConfirmationView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UC\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UC\testUC.xaml.cs">
-      <DependentUpon>testUC.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\AppViewModel.cs" />
+    <Compile Include="ViewModels\ConfirmationViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.Init.cs" />
     <Compile Include="ViewModels\MainViewModel.Pipes.cs" />
@@ -130,11 +131,11 @@
     <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="UC\MainView.xaml">
+    <Page Include="UC\ConfirmationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UC\testUC.xaml">
+    <Page Include="UC\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

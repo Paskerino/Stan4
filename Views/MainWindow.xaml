@@ -5,12 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Stand4"
         mc:Ignorable="d"
-        Title="SCADA Interface" Height="768" Width="1024"
-        Background="Black"       
+        Title="SCADA Interface" Height="768" Width="1024" 
+        Background="Black"
         ResizeMode="NoResize">
     <!-- WindowStyle="None" -->
     <!--Main Grid-->
-    <Grid >
-        <ContentControl Content="{Binding CurrentPage}" />
+    
+    <Grid>
+        <ContentControl Content="{Binding CurrentView}" 
+                    HorizontalContentAlignment="Stretch"
+                    VerticalContentAlignment="Stretch"/>
     </Grid>
 </Window>

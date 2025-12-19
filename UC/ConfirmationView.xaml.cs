@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Stand4
+namespace Stand4.UC
 {
     /// <summary>
-    /// Interaction logic for MainView.xaml
+    /// Interaction logic for ConfirmationView.xaml
     /// </summary>
-    public partial class MainView : UserControl
+    public partial class ConfirmationView : UserControl
     {
-        public MainView()
+        public ConfirmationView()
         {
             InitializeComponent();
         }

@@ -9,7 +9,7 @@ using CommonLogic.Services.Interfaces;
 using CommonLogic.Services.Workers;
 using Microsoft.Extensions.DependencyInjection;
 using Stand4.Services;
-using Stand4.ViewModels;
+using Stand4.UC;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -28,6 +28,7 @@ namespace Stand4
         private readonly IServiceProvider _serviceProvider;
         public App()
         {
+            //InitializeComponent();
             // 3. Створюємо колекцію сервісів
             var services = new ServiceCollection();
 
@@ -62,9 +63,9 @@ namespace Stand4
             services.AddSingleton<IReportService, ReportService>();
             services.AddSingleton<ILogReaderService, CsvLogReaderService>();
             services.AddSingleton<IStatusLineParsingService, StatusLineParsingService>();
+           
 
-            services.AddSingleton<AppViewModel>(); // Один на всю програму
-            services.AddTransient<MainPageViewModel>(); // Створюється при кожному переході
+
 
             // --- Крок 2: Реєстрація Бізнес-логіки ---
             // Контейнер автоматично "зрозуміє", що для IDataManager 
@@ -74,10 +75,19 @@ namespace Stand4
             // --- Крок 3: Реєстрація ViewModel ---
             // Так само, він автоматично впровадить IDataManager і IModbusPollingService
             // у конструктор MainViewModel.
-            services.AddSingleton<MainViewModel>();
+            //services.AddSingleton<MainViewModel>();
 
-            // --- Крок 4: Реєстрація View ---
-            // Реєструємо наше головне вікно
+            //// --- Крок 4: Реєстрація View ---
+            //// Реєструємо наше головне вікно
+            //services.AddSingleton<MainWindow>();
+
+
+            services.AddSingleton<AppViewModel>();
+
+            // 2. Твою поточну MainViewModel реєструємо як MainPageViewModel 
+            // (це та сама логіка, просто тепер це "одна зі сторінок")
+            services.AddTransient<MainPageViewModel>();
+            services.AddTransient<ConfirmationViewModel>();
             services.AddSingleton<MainWindow>();
         }
 
@@ -85,12 +95,18 @@ namespace Stand4
         {
             base.OnStartup(e);
 
-            // 6. Дістаємо головне вікно з контейнера
-            // Контейнер *автоматично* створить MainWindow
-            // і (якщо ми зробимо Крок 3) передасть йому MainViewModel у конструктор.
-            var mainWindow = _serviceProvider.GetService<MainWindow>();
+            var mainTemplate = new DataTemplate(typeof(MainPageViewModel));
+            mainTemplate.VisualTree = new FrameworkElementFactory(typeof(MainView));
+            this.Resources.Add(new DataTemplateKey(typeof(MainPageViewModel)), mainTemplate);
+            //Test
+             var testTemplate = new DataTemplate(typeof(ConfirmationViewModel));
+            testTemplate.VisualTree = new FrameworkElementFactory(typeof(ConfirmationView));
+             this.Resources.Add(new DataTemplateKey(typeof(ConfirmationViewModel)), testTemplate);
 
-            // 7. Показуємо вікно
+            var appViewModel = _serviceProvider.GetRequiredService<AppViewModel>();
+            appViewModel.GoToMainPage();
+
+            var mainWindow = _serviceProvider.GetService<MainWindow>();
             mainWindow.Show();
         }
     }

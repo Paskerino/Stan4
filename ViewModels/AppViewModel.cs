@@ -5,36 +5,54 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Stand4.ViewModels
+namespace Stand4
 {
     public class AppViewModel : BaseViewModel
     {
         private readonly IServiceProvider _serviceProvider;
-        private object _currentPage;
+        private object _currentView;
 
-        public object CurrentPage
+        public object CurrentView
         {
-            get => _currentPage;
-            set { _currentPage = value; OnPropertyChanged(); }
+            get => _currentView;
+            set { _currentView = value;
+                OnPropertyChanged(); }
         }
 
         public AppViewModel(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            ShowMainPage();
+           // GoToMainPage();
         }
 
-        public void ShowMainPage()
+        public void GoToMainPage()
         {
-            // Отримуємо твою "стару" логіку з DI
-            var mainPageVM = _serviceProvider.GetRequiredService<MainPageViewModel>();
+            var vm = _serviceProvider.GetRequiredService<MainPageViewModel>();
+            // Підписуємося на подію переходу (якщо треба)
+            CurrentView = vm;
+        }
 
-            // Підписуємося на запит відкриття FTP
-            //mainPageVM.RequestOpenFtp += () => {
-               // CurrentPage = _serviceProvider.GetRequiredService<FtpViewModel>();
-            //};
+        public void RequestConfirmation(string message, Action<bool> callback)
+        {
+            // 1. Запам'ятовуємо, де ми були (опціонально, якщо хочеш повернутись точно туди ж)
+            var previousView = CurrentView;
 
-            CurrentPage = mainPageVM;
+            // 2. Створюємо VM підтвердження
+            var confirmVM = new ConfirmationViewModel(message);
+
+            // 3. Налаштовуємо, що робити, коли там натиснуть кнопку
+            confirmVM.OnResult = (result) =>
+            {
+                // Виконуємо логіку, яку просили (отримуємо інформацію result)
+                callback(result);
+
+                // 4. Повертаємося назад на головну (або на попередню)
+                // GoToMainPage(); // Або:
+                CurrentView = previousView;
+            };
+
+            // 5. Перемикаємо екран
+            CurrentView = confirmVM;
         }
     }
 }
