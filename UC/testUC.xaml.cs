@@ -38,6 +38,7 @@ namespace Stand4
             public short wMinute;
             public short wSecond;
             public short wMilliseconds;
+
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]
